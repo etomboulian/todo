@@ -38,7 +38,7 @@ def update_person(id: int):
     db = SessionLocal()
     raw_data = request.get_json()
     update_person = schemas.PersonUpdate(**raw_data)
-    update_db_person = repository.person.update(db, update_db_person, id)
+    update_db_person = repository.person.update(db, update_person, id)
     return jsonify(update_db_person)
 
 @bp.route("/people/<int:id>", methods=["DELETE"])
