@@ -2,12 +2,17 @@ from core.db import Session
 from core.schemas import BaseSchema, CreateSchema, UpdateSchema
 from core.models import Base
 
+# TODO: Rewrite this using Generics instead of inheritance
+
 class BaseRepository():
     def __init__(self, model: Base):
         self.model = model
 
     def get(self, db: Session, id: int) -> Base:
         return db.query(self.model).filter(self.model.id == id).first()
+    
+    def list(self, db: Session, skip: int = 0, limit: int = 10):
+        return db.query(self.model).offset(skip).limit(limit).all()
 
     def create(self, db:Session, item_in: CreateSchema):
         item_in = item_in.model_dump()
@@ -28,8 +33,6 @@ class BaseRepository():
         db.commit()
         db.refresh(update_item)
         return update_item
-        
-
 
     def delete(self, db: Session, del_item_id: int):
         item = self.get(db, del_item_id)
@@ -38,14 +41,15 @@ class BaseRepository():
         return item
     
 
+# To allow overriding/additional methods
 class TodoRepository(BaseRepository):
     ...
 
-
+# To allow overriding/additional methods
 class PersonRepository(BaseRepository):
     ...
 
 from core.models import Todo, Person
+
 todo = TodoRepository(Todo)
 person = PersonRepository(Person)
-

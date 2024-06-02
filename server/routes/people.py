@@ -2,22 +2,47 @@ from flask import Blueprint, request, jsonify
 
 bp = Blueprint("api", __name__)
 
-@bp.route("/people", methods=["GET"])
+import core.repository as repository
+import core.schemas as schemas
+from core.db import SessionLocal
+
+not_found = {
+    "message": "Not found"
+}
+
+@bp.route("/people/", methods=["GET"])
 def get_people():
-    return "Get People Endpoint"
+    db = SessionLocal()
+    people_list = repository.person.list(db)
 
-@bp.route("/people", methods=["POST"])
+    response = people_list if people_list else not_found
+    return jsonify(response)
+
+@bp.route("/people/", methods=["POST"])
 def create_person():
-    return "Create Person Endpoint"
+    db = SessionLocal()
+    raw_data = request.get_json()
+    new_person = schemas.PersonCreate(**raw_data)
+    new_db_person = repository.person.create(db, new_person)
+    return jsonify(new_db_person)
 
-@bp.route("/people/{id:int}", methods=["GET"])
-def get_person():
-    return "Get Person Endpoint"
+@bp.route("/people/<int:id>", methods=["GET"])
+def get_person(id: int):
+    db = SessionLocal()
+    person = repository.person.get(db, id)
+    response = person if person else not_found
+    return jsonify(response)
 
-@bp.route("/people/{id:int}", methods=["PUT"])
-def update_person():
-    return "Update Person Endpoint"
+@bp.route("/people/<int:id>", methods=["PUT"])
+def update_person(id: int):
+    db = SessionLocal()
+    raw_data = request.get_json()
+    update_person = schemas.PersonUpdate(**raw_data)
+    update_db_person = repository.person.update(db, update_db_person, id)
+    return jsonify(update_db_person)
 
-@bp.route("/people/{id:int}", methods=["DELETE"])
-def delete_person():
-    return "Delete Person Endpoint"
+@bp.route("/people/<int:id>", methods=["DELETE"])
+def delete_person(id: int):
+    db = SessionLocal()
+    deleted_person = repository.person.delete(db, id);
+    return jsonify(deleted_person)

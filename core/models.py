@@ -1,8 +1,9 @@
 from core.db import Base
 from sqlalchemy.orm import Mapped, mapped_column
 from datetime import datetime
+from dataclasses import dataclass
 
-
+@dataclass
 class Todo(Base):
     __tablename__ = 'todo'
 
@@ -19,7 +20,7 @@ class Todo(Base):
                 dump[field] = self.__dict__[field]
         return dump
       
-
+@dataclass
 class Person(Base):
     __tablename__ = "person"
     
