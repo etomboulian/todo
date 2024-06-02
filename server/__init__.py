@@ -1,10 +1,13 @@
-from flask import Flask
+from flask import Flask, Blueprint
 
 app = Flask(__name__)
 
-from .routes.people import bp
-app.register_blueprint(bp)
+# Register the SSR website bp
+import server.web as web
+app.register_blueprint(web.bp)
 
-@app.route("/", methods=["GET"])
-def home_page():
-    return "<h2> Welcome to the home page </h2>"
+# Register the api bp
+import server.api as api
+app.register_blueprint(api.bp)
+
+
