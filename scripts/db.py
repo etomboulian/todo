@@ -1,5 +1,5 @@
 
-from core.db import SessionLocal, Base
+from core.db import SessionLocal, Base, engine
 import core.repository as repository
 import core.schemas as schemas
 
@@ -26,6 +26,6 @@ def add_initial_data():
 
 def create_db():
     import core.models
-    Base.metadata.create_all()
+    Base.metadata.create_all(bind=engine)
 
 
