@@ -1,0 +1,12 @@
+name: Deploy to Google Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  GCR_LOCATION: us
+  SERVICE_NAME: todoApp
+  GCR_PATH: gcr.io/$PROJECT_ID/$SERVICE_NAME
