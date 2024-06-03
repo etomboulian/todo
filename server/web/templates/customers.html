@@ -1,12 +1,12 @@
 {% extends "layout/layout.html" %}
 
-{%block title%}Home Page{% endblock %}
+{%block title%}Customers Page{% endblock %}
 
 {% block side_menu%}
 {%include 'layout/side_menu.html'%}
 {% endblock %}
 
 {% block content %}
-<h3>This is the home page</h3>
+<h3>This is the Customers Page</h3>
 <h4>Go to the <a href="{{url_for('web.todos.list')}}">To Do List</a></h4>
 {% endblock %}
