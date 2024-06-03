@@ -1,5 +1,5 @@
 
-from core.db import SessionLocal
+from core.db import SessionLocal, Base
 import core.repository as repository
 import core.schemas as schemas
 
@@ -23,6 +23,9 @@ def add_initial_data():
         new_item = schemas.TodoCreate(**todo)
         repository.todo.create(db, new_item)
 
-add_initial_data()
+
+def create_db():
+    import core.models
+    Base.metadata.create_all()
 
 
