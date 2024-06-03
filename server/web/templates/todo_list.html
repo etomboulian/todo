@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h3>This is the todo list</h3>
+
+<form action="/todo/create" method="get">
+    <button>Create New</button>
+</form>
+<br>
+<table border="1">
+    <tr>
+        <th>Subject</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    {% for todo in todo_list %}
+    <tr>
+        <td>{{ todo.subject }}</td>
+        <td>{{ todo.description }}</td>
+        <td>
+            <form action="/todo/{{todo.id}}" method="get"><button>Edit</button></form>
+            <form action="/todo/{{todo.id}}/delete" method="post"><button>Delete</button></form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
