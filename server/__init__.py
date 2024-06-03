@@ -3,7 +3,7 @@ from flask import Flask, Blueprint
 app = Flask(__name__)
 
 # Register the SSR website bp
-import server.web as web
+from server import web
 app.register_blueprint(web.bp)
 
 # Register the api bp

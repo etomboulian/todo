@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block side_menu %}
+{% include 'side_menu.html'%}
+{% endblock %}
+
+{% block custom_css %}
+<link rel="stylesheet" href="{{url_for('static', filename='side_menu.css')}}">
+{% endblock %}
+
+{% block custom_scripts %}
+<script src="{{url_for('static', filename='todo.js')}}"></script>
+{% endblock %}
+
+{% block content %}
+
+{%if action == 'edit'%} <!-- Render this template for ToDo Create/Edit Actions -->
+
+{% if todo %} <!-- If there is a ToDo then its an edit -->
+<form action="/todo/{{todo.id}}" method="post">
+    <label for=subject>Subject</label><input type="text" name="subject" id="subject" value="{{todo.subject}}"><br><br>
+    <label for=description>Description</label><input type="text" name="description" id="description"
+        value="{{todo.description}}">
+
+    <button>Submit</button>
+    <button formaction="{{url_for('web.todos.list')}}">Cancel</button>
+</form>
+
+{% else %} <!-- Otherwise its a create -->
+<form action="{{url_for('web.todos.create')}}" method="post">
+    <label for=subject>Subject</label><input type="text" name="subject" id="subject" "><br><br>
+            <label for=description>Description</label><input type=" text" name="description" id="description">
+    <button>Submit</button>
+    <button formaction="{{url_for('web.todos.list')}}">Cancel</button>
+</form>
+
+{% endif %}
+
+{% elif action == 'list'%} <!-- Render this template for the Todo List -->
+<form action="{{url_for('web.todos.create')}}" method="get">
+    <button>Create New</button>
+</form>
+<br>
+<table border="1">
+    <tr>
+        <th>Subject</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    {% for todo in todo_list %}
+    <tr>
+        <td>{{ todo.subject }}</td>
+        <td>{{ todo.description }}</td>
+        <td>
+            <form action="{{url_for('web.todos.edit', id=todo.id)}}" method="get"><button>Edit</button></form>
+            <form action="{{url_for('web.todos.delete', id=todo.id)}}" method="post">
+                <button>Delete</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{%endif%}
+
+
+
+{% endblock %}
